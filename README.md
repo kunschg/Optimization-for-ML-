@@ -1,3 +1,5 @@
-# Optimization-for-ML-
+#Optimization for ML
 
-Repository for storing all codes and notebook for the Optimisation course in IASD Master's.
+This repo contains all codes and JUpyter Notebook for the course of optimization in the IASD's master.
+
+Input data files are available in the "../data/" directory.
