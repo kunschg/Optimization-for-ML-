@@ -127,6 +127,41 @@ def plot_evolution_on_test_error(A_train, Y_train, A_test, Y_test, start, stop, 
     lambda0 = lambda_list[i]
     xRidge = X[:,i]
     print( 'Ridge: ' + str(E.min()) )
+    print( 'Optimal X is :')
+    print(xRidge)
+    # Display error evolution.
+    plt.clf
+    plt.plot(lambda_list/lmax, E)
+    plt.plot( [lambda0/lmax,lambda0/lmax], [E.min(), E.max()], 'r--')
+    plt.axis('tight')
+    plt.xlabel('$\lambda/|Atrain|^2$')
+    plt.ylabel('$E$')
+
+def plot_evolution_on_test_error_with_bias(A_train, Y_train, A_test, Y_test, start, stop, num):
+    p = A_train.shape[1]
+    one_vector_train = np.ones(A_train.shape[0])
+    one_vector_test = np.ones(A_test.shape[0])
+
+    A_train = np.column_stack((one_vector_train, A_train))
+    A_test = np.column_stack((one_vector_test, A_test))
+    lmax = np.linalg.norm(A_train,2)**2
+    lambda_list = lmax*np.linspace(start,stop,num)
+    X = np.zeros( (p+1,num) )
+    E = np.zeros( (num,1) )
+
+    for i in np.arange(0,num):
+        Lambda = lambda_list[i]
+        x = np.linalg.solve( A_train.transpose().dot(A_train) + Lambda*np.eye(p+1), A_train.transpose().dot(Y_train) )
+        X[:,i] = x.flatten() # bookkeeping
+        E[i] = np.linalg.norm(A_test.dot(x)-Y_test) / np.linalg.norm(Y_test)
+
+    # find optimal lambda
+    i = E.argmin()
+    lambda0 = lambda_list[i]
+    xRidge = X[:,i]
+    print( 'Ridge: ' + str(E.min()) )
+    print( 'Optimal X is :')
+    print(xRidge)
     # Display error evolution.
     plt.clf
     plt.plot(lambda_list/lmax, E)
