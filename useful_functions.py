@@ -1,6 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def generate_dataset(nsamples, sigma=0.):
+    
+    """
+    Generate a dataset with the specified number of samples
+    
+    :param nsamples: number of sample points
+    :type nsamples: int
+    :param sigma: standard deviation of the noise
+    :type sigma: float
+    
+    :return: Generated dataset {(x_n, y_n), n = 1, ..., nsamples}
+    :rtype: tuple of numpy arrays
+    """
+
+    x = np.zeros((nsamples, 2))
+    x[:, 0] = np.random.uniform(-5, 5, nsamples)
+    x[:, 1] = np.random.uniform(-5, 5, nsamples)
+
+    eps = np.random.normal(loc=0, scale=sigma, size=nsamples)
+    
+    y = 4*x[:, 0] + 3*x[:, 1] + eps
+    return x, y
+
+
 def unison_shuffled_copies(a, b):
     '''
     Returns a similar permutation between arrays a,b (used for shuffle)
@@ -82,10 +106,10 @@ def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
     D = A_train.shape[1]
 
     #various step_size to test 
-    comparison = [0.01,0.1,1,3,3.1]
+    comparison = [0.01,0.1,1,3,3.1,3.2]
     step_size_mult = [ x*1e-5 for x in comparison ]
 
-    xopt = np.linalg.solve( A_train.transpose().dot(A_train) + ridge_parameter*np.eye(D), A_train.transpose().dot(Y_train) )
+    xopt = np.linalg.solve(A_train.transpose().dot(A_train) + ridge_parameter*np.eye(D), A_train.transpose().dot(Y_train) )
     plt.clf
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
@@ -103,7 +127,7 @@ def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
         ax1.axis('tight')
         plt.title('f(x_k)')
 
-        e = np.log10(flist - np.linalg.norm(np.dot(A_train,xopt)-Y_train)**2 + ridge_parameter*xopt.transpose().dot(xopt) +1e-20)
+        e = np.log10(flist - np.linalg.norm(np.dot(A_train,xopt)-Y_train)**2 - ridge_parameter*xopt.transpose().dot(xopt) +1e-20)
         ax2.plot(e-e[0], label=str(step_size_mult[istep]))
         ax2.axis('tight')
         leg = ax2.legend()
