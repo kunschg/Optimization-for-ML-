@@ -101,6 +101,9 @@ def gradient_descent(A_train, Y_train, nb_of_iterations, step_size, ridge_parame
     return iteration, loss_function_array
 
 def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
+    '''
+    Code from Gabriel Peyré
+    '''
     flist = np.zeros((niter,1))
 
     D = A_train.shape[1]
@@ -134,6 +137,9 @@ def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
         plt.title('$log(f(x_k)-min J)$')
 
 def plot_evolution_on_test_error(A_train, Y_train, A_test, Y_test, start, stop, num):
+    '''
+    Code from Gabriel Peyré
+    '''
     p = A_train.shape[1]
     lmax = np.linalg.norm(A_train,2)**2
     lambda_list = lmax*np.linspace(start,stop,num)
@@ -162,6 +168,9 @@ def plot_evolution_on_test_error(A_train, Y_train, A_test, Y_test, start, stop, 
     plt.ylabel('$E$')
 
 def plot_evolution_on_test_error_with_bias(A_train, Y_train, A_test, Y_test, start, stop, num):
+    '''
+    Code from Gabriel Peyré
+    '''
     p = A_train.shape[1]
     one_vector_train = np.ones(A_train.shape[0])
     one_vector_test = np.ones(A_test.shape[0])
