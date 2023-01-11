@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def generate_dataset(nsamples, sigma=0.):
+def generate_dataset(nsamples, range_uniform=1, sigma=0.):
     
     """
     Generate a dataset with the specified number of samples
@@ -16,8 +16,8 @@ def generate_dataset(nsamples, sigma=0.):
     """
 
     x = np.zeros((nsamples, 2))
-    x[:, 0] = np.random.uniform(-5, 5, nsamples)
-    x[:, 1] = np.random.uniform(-5, 5, nsamples)
+    x[:, 0] = np.random.uniform(-range_uniform, range_uniform, nsamples)
+    x[:, 1] = np.random.uniform(-range_uniform, range_uniform, nsamples)
 
     eps = np.random.normal(loc=0, scale=sigma, size=nsamples)
     
