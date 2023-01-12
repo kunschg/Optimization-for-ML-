@@ -202,3 +202,64 @@ def plot_evolution_on_test_error_with_bias(A_train, Y_train, A_test, Y_test, sta
     plt.axis('tight')
     plt.xlabel('$\lambda/|Atrain|^2$')
     plt.ylabel('$E$')
+
+def gradient_descent_with_momentum(A_train,Y_train,nb_of_iterations,step_size,gamma):
+    # Gradient descent with momentum for mu-strongly convex and L-smooth functions
+    
+    D = A_train.shape[1]
+
+    x = np.random.rand(D) #because x takes in account no bias
+    m = np.zeros(D) #init of the momentum parameter
+
+    loss_function_array= []
+    iteration = []
+
+    for i in range(nb_of_iterations): 
+        iteration.append(i)
+
+        loss_function_train = np.linalg.norm(np.dot(A_train,x)-Y_train)**2
+        loss_function_array.append(loss_function_train)
+
+        grad = 2*A_train.T.dot(np.dot(A_train,x)-Y_train)
+        m = (1-gamma) * grad + gamma * m 
+        x = x - step_size*grad
+    
+    return iteration, loss_function_array
+
+def plot_convergence_rate_with_momentum(A_train,Y_train, niter, step_size):
+    '''
+    Code inspired Gabriel Peyré
+    '''
+    flist = np.zeros((niter,1))
+
+    D = A_train.shape[1]
+
+    #various step_size to test 
+    comparison = [0., 0.7, 0.8, 0.9,]
+    gamma_mult = [ x for x in comparison ]
+
+    xopt = np.linalg.solve(A_train.transpose().dot(A_train), A_train.transpose().dot(Y_train) )
+    plt.clf
+
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+
+    for igamma in np.arange(0,len(gamma_mult)):
+        gamma = gamma_mult[igamma]
+        x = np.random.rand(D) #because x takes in account no bias
+        m = np.zeros(D)
+
+        for i in np.arange(0,niter):
+            flist[i] = np.linalg.norm(np.dot(A_train,x)-Y_train)**2 
+            grad = 2*A_train.T.dot(np.dot(A_train,x)-Y_train) 
+            m = (1-gamma) * grad + gamma * m
+            x = x - step_size*m
+
+        ax1.plot(flist)
+        ax1.axis('tight')
+        plt.title('f(x_k)')
+
+        e = np.log10(flist - np.linalg.norm(np.dot(A_train,xopt)-Y_train)**2 + 1e-20)
+        ax2.plot(e-e[0], label=str(gamma_mult[igamma]))
+        ax2.axis('tight')
+        leg = ax2.legend()
+        plt.title('$log(f(x_k)-min J)$')
