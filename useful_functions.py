@@ -263,3 +263,34 @@ def plot_convergence_rate_with_momentum(A_train,Y_train, niter, step_size):
         ax2.axis('tight')
         leg = ax2.legend()
         plt.title('$log(f(x_k)-min J)$')
+
+def plot_iterates_2D(iterates, proj_iterates, R, with_set):
+    '''
+    Code inspired from Irène Waldspurger
+    '''
+    # Display a list of points in R^2
+    
+    # Plot
+    fig, ax = plt.subplots()
+    ax.plot(iterates[0,:], iterates[1,:], 'bx-', label='Iterates GD')
+    ax.plot(proj_iterates[0,:], proj_iterates[1,:], 'gx-',label='Iterates GD Projected')
+    ax.legend()
+
+    if with_set:
+        circle = plt.Circle((0,0),R, color='k', fill=False)
+        ax.add_patch(circle)
+
+    # Axes limits
+    xmin = min(min(iterates[0,:]),min(proj_iterates[0,:]))
+    xmax = max(max(iterates[0,:]),max(proj_iterates[0,:]))
+    (xmin,xmax) = (1.2*xmin-0.2*xmax,1.2*xmax-0.2*xmin)
+    ymin = min(min(iterates[1,:]),min(proj_iterates[1,:]))
+    ymax = max(max(iterates[1,:]),max(proj_iterates[1,:]))
+    (ymin,ymax) = (1.2*ymin-0.2*ymax,1.2*ymax-0.2*ymin)
+    ax.set_xlim(xmin=xmin,xmax=xmax)
+    ax.set_ylim(ymin=ymin,ymax=ymax)
+    
+    # Grid
+    ax.grid(True)
+    ax.spines['left'].set_position('zero')
+    ax.spines['bottom'].set_position('zero')
