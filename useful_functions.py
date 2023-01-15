@@ -116,6 +116,7 @@ def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
     plt.clf
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
+    fig.tight_layout()
 
     for istep in np.arange(0,len(step_size_mult)):
         step_size = step_size_mult[istep]
@@ -131,10 +132,10 @@ def plot_convergence_rate(A_train,Y_train, niter, ridge_parameter):
         plt.title('f(x_k)')
 
         e = np.log10(flist - np.linalg.norm(np.dot(A_train,xopt)-Y_train)**2 - ridge_parameter*xopt.transpose().dot(xopt) +1e-20)
-        ax2.plot(e-e[0], label=str(step_size_mult[istep]))
+        ax2.plot(e-e[0], label=str(round(step_size_mult[istep],8)))
         ax2.axis('tight')
         leg = ax2.legend()
-        plt.title('$log(f(x_k)-min J)$')
+        plt.title('$log(f(x_k)-min GD)$')
 
 def plot_evolution_on_test_error(A_train, Y_train, A_test, Y_test, start, stop, num):
     '''
