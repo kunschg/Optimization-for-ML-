@@ -243,6 +243,7 @@ def plot_convergence_rate_with_momentum(A_train,Y_train, niter, step_size):
     plt.clf
 
     fig, (ax1, ax2) = plt.subplots(2, 1)
+    fig.tight_layout()
 
     for igamma in np.arange(0,len(gamma_mult)):
         gamma = gamma_mult[igamma]
@@ -263,7 +264,7 @@ def plot_convergence_rate_with_momentum(A_train,Y_train, niter, step_size):
         ax2.plot(e-e[0], label=str(gamma_mult[igamma]))
         ax2.axis('tight')
         leg = ax2.legend()
-        plt.title('$log(f(x_k)-min J)$')
+        plt.title('$log(f(x_k)-minGD)$')
 
 def plot_iterates_l2_2D(iterates, proj_iterates, R, with_set):
     '''
